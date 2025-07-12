@@ -6,6 +6,9 @@ export type DatabaseSchema = {
 export type Post = {
   uri: string
   cid: string
+  text: string; // textフィールドを追加
+  replyParent: string | null
+  replyRoot: string | null
   indexedAt: string
 }
 

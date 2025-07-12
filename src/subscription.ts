@@ -20,14 +20,17 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const postsToDelete = ops.posts.deletes.map((del) => del.uri)
     const postsToCreate = ops.posts.creates
       .filter((create) => {
-        // only alf-related posts
-        return create.record.text.toLowerCase().includes('alf')
+        // 「ひよこ」と「にわとり」を含むポストに絞り込んでDBへreturnする処理
+        return create.record.text.includes('ひよこ') || create.record.text.includes('にわとり');
       })
       .map((create) => {
         // map alf-related posts to a db row
         return {
           uri: create.uri,
           cid: create.cid,
+          text: create.record.text, // textフィールドを追加
+          replyParent: create.record?.reply?.parent.uri ?? null,
+          replyRoot: create.record?.reply?.root.uri ?? null,
           indexedAt: new Date().toISOString(),
         }
       })
